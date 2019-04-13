@@ -8,12 +8,6 @@
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
-    <content url="file://D:/IDE projects/spring-account">
-      <sourceFolder url="file://D:/IDE projects/spring-account/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://D:/IDE projects/spring-account/src/main/resources" type="java-resource" />
-      <sourceFolder url="file://D:/IDE projects/spring-account/src/test/java" isTestSource="true" />
-      <excludeFolder url="file://D:/IDE projects/spring-account/target" />
-    </content>
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
