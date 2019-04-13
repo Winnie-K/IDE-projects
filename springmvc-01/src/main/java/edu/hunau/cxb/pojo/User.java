@@ -1,17 +1,52 @@
 package edu.hunau.cxb.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
 
 public class User {
 
     private Integer id;
     private String username;
-    private String password;
+    private String pwd;
+
+    //对日期格式进行处理
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
+
+    public User(Integer id, String username, String pwd, LocalDate birthday) {
+        this.id = id;
+        this.username = username;
+        this.pwd = pwd;
+        this.birthday = birthday;
+    }
+
+    public LocalDate getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
 
     public User() {
     }
-    //user.id=1001&user.username=wangfei
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", pwd='" + pwd + '\'' +
+                ", birthday=" + birthday +
+                '}';
+    }
+
+    public User(Integer id, String username, String pwd) {
+        this.id = id;
+        this.username = username;
+        this.pwd = pwd;
+    }
 
     public Integer getId() {
         return id;
@@ -29,29 +64,11 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPwd() {
+        return pwd;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public LocalDate getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(LocalDate birthday) {
-        this.birthday = birthday;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", birthday=" + birthday +
-                '}';
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
 }
