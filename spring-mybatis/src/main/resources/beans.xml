@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!--装载小的配置文件(配置文件参数化)-->
+    <context:property-placeholder location="jdbc.properties"/>
+
+    <!--配置连接池的信息-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${jdbc.driverClassName}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <!--最大空闲时间，30秒内未使用则连接被丢弃，如果值为0，表示永不丢弃
+        <property name="maxIdleTime" value="30"></property>-->
+        <!--连接池中保留的最大连接数，默认值为15
+        <property name="maxPoolSize" value="15"></property>-->
+        <!--初始化时获得3个连接数，取值必须在minPoolSize和maxPoolSize之间，默认值为3
+        <property name="initialPoolSize" value="3"></property>-->
+
+     </bean>
+
+    <!--配置SqlSessionFactoryBean-->
+     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+         <!--连接池的信息-->
+         <property name="dataSource" ref="dataSource"></property>
+         <!--装载mybatis的核心配置文件:如果没有提供mybatis的核心配置文件，可以直接通过属性设置-->
+         <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+     </bean>
+
+     <!--配置扫描器：为接口自动创建代理对象，代理对象名称为类名的小驼峰写法-->
+     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+         <!--注入SqlSessionFactory对象-->
+         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+         <!--配置需要-->
+         <property name="basePackage" value="edu.hunau.cxb.sm.mapper"></property>
+     </bean>
+</beans>

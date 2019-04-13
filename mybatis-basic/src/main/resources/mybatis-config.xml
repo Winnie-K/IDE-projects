@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!--将小的配置文件中的信息装载到当前配置文件中-->
+    <properties resource="jdbc.properties"></properties>
+
+    <settings>
+        <!--设置日志实现-->
+        <setting name="logImpl" value="SLF4J"/>
+        <!--开启二级缓存-->
+        <setting name="cacheEnabled" value="true"/>
+        <!--开启延迟加载-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="aggressiveLazyLoading" value="false"/>
+    </settings>
+
+    <typeAliases>
+        <!--设置类的别名
+         <typeAlias type="edu.hunau.cxb17.mybatis.pojo.User" alias="user"></typeAlias>
+        -->
+        <package name="edu.hunau.cxb17.mybatis.pojo"></package>
+    </typeAliases>
+
+    <!--配置连接数据库的基本信息-->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--注册配置文件-->
+    <mappers>
+        <!--单个注册映射文件-->
+        <mapper resource="edu.hunau.cxb17.mybatis.mapper/UserMapper.xml"/>
+        <mapper resource="edu.hunau.cxb17.mybatis.mapper/OrderMapper.xml"/>
+
+        <!--自动注册该包下面的配置文件
+        <package name="edu.hunau.cxb17.mybatis.mapper"/>不能用！-->
+    </mappers>
+
+
+ </configuration>

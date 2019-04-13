@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.hunau.cxb.wf.pojo.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="edu.hunau.cxb.wf.pojo.pojo.User">
+    <id column="id" jdbcType="CHAR" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="pwd" jdbcType="CHAR" property="pwd" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="gender" jdbcType="CHAR" property="gender" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="ustate" jdbcType="INTEGER" property="ustate" />
+    <result column="checkcode" jdbcType="VARCHAR" property="checkcode" />
+    <result column="dotime" jdbcType="TIMESTAMP" property="dotime" />
+    <result column="earned" jdbcType="INTEGER" property="earned" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, username, pwd, email, NAME, gender, birthday, ustate, checkcode, dotime, earned
+  </sql>
+  <select id="selectByExample" parameterType="edu.hunau.cxb.wf.pojo.pojo.UserExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_user
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="edu.hunau.cxb.wf.pojo.pojo.UserExample">
+    delete from t_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="edu.hunau.cxb.wf.pojo.pojo.User">
+    insert into t_user (id, username, pwd, 
+      email, NAME, gender, birthday, 
+      ustate, checkcode, dotime, 
+      earned)
+    values (#{id,jdbcType=CHAR}, #{username,jdbcType=VARCHAR}, #{pwd,jdbcType=CHAR}, 
+      #{email,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{gender,jdbcType=CHAR}, #{birthday,jdbcType=DATE}, 
+      #{ustate,jdbcType=INTEGER}, #{checkcode,jdbcType=VARCHAR}, #{dotime,jdbcType=TIMESTAMP}, 
+      #{earned,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="edu.hunau.cxb.wf.pojo.pojo.User">
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="pwd != null">
+        pwd,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="ustate != null">
+        ustate,
+      </if>
+      <if test="checkcode != null">
+        checkcode,
+      </if>
+      <if test="dotime != null">
+        dotime,
+      </if>
+      <if test="earned != null">
+        earned,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        #{pwd,jdbcType=CHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=CHAR},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="ustate != null">
+        #{ustate,jdbcType=INTEGER},
+      </if>
+      <if test="checkcode != null">
+        #{checkcode,jdbcType=VARCHAR},
+      </if>
+      <if test="dotime != null">
+        #{dotime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="earned != null">
+        #{earned,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <insert id="insertUserBatch" parameterType="list" useGeneratedKeys="true" keyProperty="id">
+    insert into t_user(id,username,pwd,email,name,gender,birthday,ustate,checkcode,dotime,earned) values
+    <foreach  item="u" collection="list" separator=",">
+      (#{u.id},#{u.username},md5(#{u.pwd}),#{u.email},#{u.name},#{u.gender},#{u.birthday},#{u.ustate},#{u.checkcode},#{u.dotime},#{u.earned})
+    </foreach>
+  </insert>
+
+
+  <select id="countByExample" parameterType="edu.hunau.cxb.wf.pojo.pojo.UserExample" resultType="java.lang.Long">
+    select count(*) from t_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_user
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=CHAR},
+      </if>
+      <if test="record.username != null">
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pwd != null">
+        pwd = #{record.pwd,jdbcType=CHAR},
+      </if>
+      <if test="record.email != null">
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gender != null">
+        gender = #{record.gender,jdbcType=CHAR},
+      </if>
+      <if test="record.birthday != null">
+        birthday = #{record.birthday,jdbcType=DATE},
+      </if>
+      <if test="record.ustate != null">
+        ustate = #{record.ustate,jdbcType=INTEGER},
+      </if>
+      <if test="record.checkcode != null">
+        checkcode = #{record.checkcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dotime != null">
+        dotime = #{record.dotime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.earned != null">
+        earned = #{record.earned,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_user
+    set id = #{record.id,jdbcType=CHAR},
+      username = #{record.username,jdbcType=VARCHAR},
+      pwd = #{record.pwd,jdbcType=CHAR},
+      email = #{record.email,jdbcType=VARCHAR},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      gender = #{record.gender,jdbcType=CHAR},
+      birthday = #{record.birthday,jdbcType=DATE},
+      ustate = #{record.ustate,jdbcType=INTEGER},
+      checkcode = #{record.checkcode,jdbcType=VARCHAR},
+      dotime = #{record.dotime,jdbcType=TIMESTAMP},
+      earned = #{record.earned,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="edu.hunau.cxb.wf.pojo.pojo.User">
+    update t_user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        pwd = #{pwd,jdbcType=CHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=CHAR},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="ustate != null">
+        ustate = #{ustate,jdbcType=INTEGER},
+      </if>
+      <if test="checkcode != null">
+        checkcode = #{checkcode,jdbcType=VARCHAR},
+      </if>
+      <if test="dotime != null">
+        dotime = #{dotime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="earned != null">
+        earned = #{earned,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="edu.hunau.cxb.wf.pojo.pojo.User">
+    update t_user
+    set username = #{username,jdbcType=VARCHAR},
+      pwd = #{pwd,jdbcType=CHAR},
+      email = #{email,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=CHAR},
+      birthday = #{birthday,jdbcType=DATE},
+      ustate = #{ustate,jdbcType=INTEGER},
+      checkcode = #{checkcode,jdbcType=VARCHAR},
+      dotime = #{dotime,jdbcType=TIMESTAMP},
+      earned = #{earned,jdbcType=INTEGER}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>

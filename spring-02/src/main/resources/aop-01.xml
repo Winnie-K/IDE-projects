@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--声明目标对象-->
+    <bean id="userBiz" class="edu.hunau.cxb.aop.target.UserServiceImpl"></bean>
+    <!--通知Advice-->
+    <bean id="txAdvice" class="edu.hunau.cxb.aop.old.TxAdvice"></bean>
+
+    <!--配置切入点-->
+    <bean id="userPointCut" class="org.springframework.aop.support.NameMatchMethodPointcut">
+        <property name="mappedNames">
+            <list>
+                <value>add*</value>
+                <value>update*</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--配置切面:通知+切入点-->
+    <bean id="userAdvice" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="advice" ref="txAdvice"></property>
+        <property name="pointcut" ref="userPointCut"></property>
+    </bean>
+
+
+    <!--配置代理类-->
+    <bean id="userProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target" ref="userBiz"></property>
+        <property name="interceptorNames" value="userAdvice"></property>
+    </bean>
+</beans>

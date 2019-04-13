@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.hunau.cxb17.mybatis.mapper.UserMapper">
+   <!--对UserMapper开启了二级缓存-->
+    <cache></cache>
+
+    <!--insert表示执行语句
+    id是一个唯一的标识,通常和接口对应的方法名相同
+    parameterType表示对应参数类型,通常提供该类的全限定名(支持别名)-->
+
+    <insert id="insertUser" parameterType="user" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        <!--定义执行的sql语句-->
+        <!--#{参数类对应的属性名}该属性必须提供getter方法-->
+        insert into t_user(username,pwd,gender) values(#{username},md5(#{pwd}),#{gender})
+    </insert>
+    
+    <insert id="insertUserBatch" parameterType="list" useGeneratedKeys="true" keyProperty="id">
+        insert into t_user(username,pwd,gender) values
+        <foreach  item="u" collection="list" separator=",">
+            (#{u.username},md5(#{u.pwd}),#{u.gender})
+        </foreach>
+    </insert>
+
+    <delete id="deleteById"  parameterType="int">
+        delete from t_user where id=#{id}
+    </delete>
+
+    <update id="updateById" parameterType="user">
+        update t_user
+        <set>
+            <if test="username!=null">username=#{username},</if>
+            <if test="pwd!=null">pwd=#{pwd},</if>
+            <if test="gender!=null">gender=#{gender}</if>
+         </set>
+        where id=#{id}
+    </update>
+
+
+    <!--声明resutMap-->
+    <resultMap id="userMap" type="user">
+        <!--声明主键信息-->
+        <id column="id" property="id"></id>
+        <!--普通属性-->
+        <result column="username" property="username"></result>
+        <result column="pwd" property="pwd"></result>
+        <result column="gender" property="gender"></result>
+        <result column="dotime" property="dotime"></result>
+    </resultMap>
+
+    <sql id="queryAlldatas">
+        select id,username,gender,pwd,dotime from t_user
+    </sql>
+
+    <!--查询单个用户
+      能够将一条数据库中的记录封装成一个实例对象，原因是数据库中的字段名和类中属性名是匹配的
+    -->
+    <select id="selectById" parameterType="int" resultType="user">
+        select id,username,gender,pwd,dotime from t_user where id=#{id}
+    </select>
+
+    <!--接口时候返回值类型虽然是List类型,resultType只需要声明该记录的泛型的类型即可-->
+    <select id="queryByAll"  resultType="user">
+       <include refid="queryAlldatas"></include>
+    </select>
+
+    <select id="queryByLikeName" parameterType="string" resultType="user">
+        select id,username,gender,pwd,dotime from t_user where username like concat('%',#{username},'%')
+        <!--select id,username,gender,pwd,dotime from t_user where username like ’%${value}%'-->
+    </select>
+
+
+    <select id="queryByUserNameAndPwd"  resultMap="userMap">
+       <!--<include refid="queryAlldatas"/> where username=#{arg0} and pwd=#{arg1}-->
+        <include refid="queryAlldatas"/> where username=#{name} and pwd=md5(#{password})
+    </select>
+
+    <select id="queryByUserNameAndPwdMap" parameterType="map" resultMap="userMap">
+        <!--#{mapde的key}-->
+        <include refid="queryAlldatas"/> where username=#{name} and pwd=md5(#{password})
+    </select>
+
+    <select id="queryByUserProperty" parameterType="queryCriteria" resultType="user">
+        <include refid="queryAlldatas"/>
+            <!--where标签实现动态的查询：where可以自动消除多余的and或者or关键字-->
+            <where>
+                <if test="user!=null">
+                <if test="user.id!=null">id=#{user.id}</if>
+                <if test="user.username!=null">and username like concat('%',#{user.username},'%')</if>
+                <if test="user.pwd!=null">and pwd=md5(#{user.pwd})</if>
+                <if test="user.gender!=null">and gender=#{user.gender}</if>
+                </if>
+            </where>
+    </select>
+
+
+    <select id="queryByUserIds" parameterType="queryCriteria" resultType="user">
+        <include refid="queryAlldatas"/>
+        where id
+        <foreach collection="ids" item="id" open="in(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+
+<!--====================================================================-->
+    <resultMap id="userCacheMap" type="user">
+        <id column="uid" property="id"></id>
+        <result column="pwd" property="pwd" javaType="string"></result>
+        <result column="gender" property="gender"></result>
+        <result column="username" property="username"></result>
+        <result column="udotime" property="dotime"></result>
+        <!--可能对应多个订单信息-->
+        <collection property="orders" column="u_id" javaType="list" ofType="order">
+            <id column="uid" property="id"></id>
+            <result column="total" property="total"></result>
+            <result column="nums" property="nums"></result>
+            <result column="odotime" property="dotime"></result>
+        </collection>
+    </resultMap>
+
+
+    <select id="queryByIdCacheOrders" parameterType="int" resultMap="userCacheMap" >
+        SELECT u.id uid,username,pwd,gender,u.dotime udotime,o.id oid,total,nums,o.dotime odotime
+        FROM t_user u,t_order o
+        WHERE u.id=o.u_id AND u.id=#{id}
+    </select>
+
+    <resultMap id="userLoadOrders" type="user">
+        <id column="id" property="id"></id>
+        <result column="username" property="username"></result>
+        <result column="pwd" property="pwd" javaType="string"></result>
+        <result column="gender" property="gender"></result>
+        <result column="dotime" property="dotime"></result>
+        <!--可能对应多个订单信息-->
+        <collection property="orders" ofType="order"
+         select="edu.hunau.cxb17.mybatis.mapper.OrderMapper.queryByUserId" column="id">
+        </collection>
+    </resultMap>
+
+    <select id="queryByIdLoadOrders" parameterType="int" resultMap="userLoadOrders">
+        <include refid="queryAlldatas"/>where id=#{id}
+    </select>
+
+</mapper>

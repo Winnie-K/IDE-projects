@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace是Mapper对应的全限定名-->
+<mapper namespace="edu.hunau.cxb.sm.mapper.OrderMapper">
+    <!--对OrderMapper开启了二级缓存-->
+    <cache></cache>
+
+    <insert id="insertOrder" parameterType="order">
+        insert into t_order(id,total,nums,u_id) values(#{id},#{total},#{nums},#{u.id})
+    </insert>
+
+    <select id="queryById" resultType="order">
+        select id,total,nums,dotime from t_order where id=#{id}
+    </select>
+
+    <resultMap id="orderCacheUserMap" type="order">
+        <id column="oid" property="id"></id>
+        <result column="total" property="total"></result>
+        <result column="nums" property="nums"></result>
+        <result column="odotime" property="dotime"></result>
+        <!--一个订单只会对应一个用户-->
+        <association property="u" javaType="user">
+            <id column="uid" property="id"></id>
+            <result column="pwd" property="pwd" javaType="string"></result>
+            <result column="gender" property="gender"></result>
+            <result column="username" property="username"></result>
+            <result column="udotime" property="dotime"></result>
+        </association>
+    </resultMap>
+
+
+    <select id="queryByIdCacheUser" parameterType="string" resultMap="orderCacheUserMap">
+        SELECT u.id uid,username,pwd,gender,u.dotime udotime,o.id oid,total,nums,o.dotime odotime
+        FROM t_user u,t_order o
+        WHERE u.id=o.u_id AND o.id=#{id}
+    </select>
+
+    <select id="queryByUserId" parameterType="int" resultType="order">
+        select id,total,nums,dotime from t_order where u_id=#{id}
+    </select>
+</mapper>
+

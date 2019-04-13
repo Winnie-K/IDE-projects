@@ -1,0 +1,2 @@
+[13:17:25:309] [WARN] - edu.hunau.cxb.Log4jDemo.show(Log4jDemo.java:17) - [3]-my level is WARN
+[13:17:25:312] [ERROR] - edu.hunau.cxb.Log4jDemo.show(Log4jDemo.java:18) - [4]-my level is ERROR

@@ -1,0 +1,11 @@
+#mysql数据库创建一个库 cxb17_ssm,默认的字符编码为utf8
+create database cxb17_ssm default charset=utf8
+
+#提供t_user表
+CREATE TABLE t_user(
+   id INT UNSIGNED AUTO_INCREMENT  PRIMARY KEY,
+   username VARCHAR(60) UNIQUE NOT NULL,
+   gender ENUM('F','M') DEFAULT 'F',
+   pwd CHAR(32) NOT NULL,
+   dotime TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)ENGINE=INNODB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;

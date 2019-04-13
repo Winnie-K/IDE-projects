@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--声明UserService，该对象的实例由spring容器进行管理-->
+    <bean id="userBiz" class="edu.hunau.cxb17.service.impl.UserServiceImpl">
+        <property name="userDao" ref="userDao"></property>
+    </bean>
+    <bean id="userDao" class="edu.hunau.cxb.wf.dao.impl.UserDaoImpl"></bean>
+
+    <!--或者
+    自动注入:byName根据名字自动注入
+    <bean id="userBiz"  autowire="byName" class="edu.hunau.cxb17.service.impl.UserServiceImpl">
+    </bean>
+    <bean id="UserDao" class="UserDaoImpl"/>
+
+    byType根据类型自动注入
+    <bean id="userBiz"  autowire="byType" class="edu.hunau.cxb17.service.impl.UserServiceImpl">
+    </bean>
+    <bean id="UserDao" class="UserDaoImpl"/>
+       -->
+
+
+    <bean id="setterDemo" class="edu.hunau.cxb17.service.impl.InjectBeanSetter">
+        <!--setter注入使用property标签进行注入-->
+        <property name="id" value="1001"/>
+        <property name="name" value="haoren"/>
+
+
+        <!--数组类型-->
+        <property name="array">
+            <array>
+                <value>lucy</value>
+                <value>lily</value>
+            </array>
+        </property>
+
+
+        <!--list类型-->
+        <property name="lists">
+            <list>
+                <value>haoren</value>
+                <value>wangfei</value>
+                <value>lisi</value>
+            </list>
+        </property>
+
+
+        <!--set类型-->
+        <property name="sets">
+            <set>
+                <value>1001</value>
+                <value>1002</value>
+                <value>1003</value>
+            </set>
+        </property>
+
+
+        <!--map类型-->
+        <property name="maps">
+            <map>
+                <entry key="username">
+                    <value>haoren</value>
+                </entry>
+                <entry key="password">
+                    <value>12345</value>
+                </entry>
+            </map>
+        </property>
+
+
+        <!--properties类型-->
+        <property name="proes">
+            <props>
+                <prop key="1001">lucy</prop>
+                <prop key="1002">lily</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="injectCons" class="edu.hunau.cxb17.demo.InjectConstructDemo">
+        <!--index表示第一个参数，type表示参数的类型，value表示注入的值-->
+        <constructor-arg  index="0" type="java.lang.String" value="haoren"></constructor-arg>
+        <constructor-arg index="1" value="250"/>
+    </bean>
+
+
+    <!--通过p名空间简化setter注入的写法-->
+    <bean id="pcBean" class="edu.hunau.cxb17.demo.PCBean" p:id="1001" p:str="haoren"></bean>
+
+    <!--通过p名空间简化setter注入的写法-->
+    <bean id="pcBean2" class="edu.hunau.cxb17.demo.PCBean" c:id="1002" c:str="lily"></bean>
+
+    <!--factory-method声明工厂方法-->
+    <bean id="staticBean" class="edu.hunau.cxb17.demo.StaticBeanFactory"  factory-method="createBean"></bean>
+
+    <!--实例工厂方法-->
+    <bean id="beanFactory" class="edu.hunau.cxb17.demo.BeanFactory"></bean>
+    <bean id="facBean" factory-bean="beanFactory" factory-method="createBean"></bean>
+
+
+    <!--生命周期的方法-->
+    <bean id="fooSingeton" class="edu.hunau.cxb17.demo.Foo" init-method="init" destroy-method="destory"></bean>
+
+</beans>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--配置注解的扫描-->
+    <context:component-scan base-package="edu.hunau.cxb"></context:component-scan>
+    <context:component-scan base-package="edu.hunau.cxb.service"/>
+
+
+
+    <!--配置连接池的信息-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${jdbc.driverClassName}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <!--配置JdbcTemplate对象-->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!--装载小的配置文件(配置文件参数化)-->
+    <context:property-placeholder location="jdbc.properties"/>
+
+    <!--获得针对jdbc的事务管理器-->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!--事务管理控制-->
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <!--配置事务的属性-->
+        <tx:attributes>
+            <!--
+            name:定义哪些方法进行事务管理
+            isolation:隔离性,默认值为isolation_default
+            propagation:传播性,默认propagation_REQUIRED
+            read-only:只读性默认为false
+            timeout :超时性
+            rollback-for :需要回滚的异常类型
+            no-rollback- for:不需要回滚的异常类型
+            -->
+            <tx:method name="save*" rollback-for="Exception"/>
+            <tx:method name="query*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--切面配置-->
+    <aop:config>
+        <!--service.impl包下面的所有的类-->
+        <aop:pointcut id="txPointCut" expression="within(edu.hunau.cxb.service.impl.*)"></aop:pointcut>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointCut"></aop:advisor>
+    </aop:config>
+
+</beans>

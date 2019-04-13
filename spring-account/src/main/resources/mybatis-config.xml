@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+   <settings>
+       <setting name="logImpl" value="SLF4J"/>
+      <setting name="lazyLoadingEnabled" value="true"/>
+       <setting name="aggressiveLazyLoading" value="false" />
+   </settings>
+
+<typeAliases>
+    <package name="edu.hunau.cxb.wf.pojo"></package>
+</typeAliases>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/cxb17_ssm?useUnicode=true&amp;characterEncoding=utf8&amp;characterSetResults=utf8&amp;serverTimezone=GMT&amp;useSSL=false"/>
+                <property name="username" value="root"/>
+                <property name="password" value="w1641638256nswdy"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <mapper resource="edu/hunau/cxb/wf/dao/UserDao.xml"/>
+    </mappers>
+
+</configuration>
